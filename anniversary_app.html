@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversary ke-7</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        quicksand: ['Quicksand', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Snow & Star Animation */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        .falling-item {
+            position: fixed;
+            top: -10vh;
+            color: #93c5fd;
+            pointer-events: none;
+            z-index: 0;
+            animation: fall linear infinite;
+        }
+
+        /* Scrollbar styling for love letter */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #93c5fd; 
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa; 
+        }
+    </style>
+
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const SnowAndStars = () => {
+            const items = Array.from({ length: 40 });
+            return (
+                <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                    {items.map((_, i) => (
+                        <div key={i} className="falling-item"
+                             style={{
+                                left: `${Math.random() * 100}vw`,
+                                animationDuration: `${Math.random() * 5 + 3}s`,
+                                animationDelay: `${Math.random() * 5}s`,
+                                fontSize: `${Math.random() * 15 + 10}px`,
+                                opacity: Math.random() * 0.5 + 0.3
+                             }}>
+                            {Math.random() > 0.5 ? '❄️' : '⭐'}
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [page, setPage] = useState(1);
+            const [password, setPassword] = useState("");
+            const [errorMsg, setErrorMsg] = useState(false);
+            const [isSnowing, setIsSnowing] = useState(false);
+
+            // Turn on snow effect from page 7 onwards
+            useEffect(() => {
+                if (page >= 7 && page <= 12) {
+                    setIsSnowing(true);
+                } else {
+                    setIsSnowing(false);
+                }
+            }, [page]);
+
+            const handleKeyPress = (num) => {
+                if (password.length < 8) {
+                    const newPass = password + num;
+                    setPassword(newPass);
+                    
+                    if (newPass.length === 8) {
+                        if (newPass === "11111111") {
+                            setTimeout(() => {
+                                setPage(2);
+                                setErrorMsg(false);
+                            }, 300);
+                        } else {
+                            setErrorMsg(true);
+                            setTimeout(() => {
+                                setPassword("");
+                                setErrorMsg(false);
+                            }, 1500);
+                        }
+                    }
+                }
+            };
+
+            const handleDelete = () => {
+                setPassword(password.slice(0, -1));
+            };
+
+            const photos = [
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+1', label: 'first meet', text: 'Masih ingat hari pertama kali kita bertemu? Senyum mamas hari itu mengunci hatiku selamanya.', btn: 'Cieee, next!' },
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+2', label: 'our date', text: 'Kencan pertama yang penuh deg-degan tapi paling membahagiakan.', btn: 'Lanjut, sayang' },
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+3', label: 'hari kita', text: 'Hari di mana kita berjanji untuk selalu bersama. Alhamdulillah 7 tahun sudah berlalu.', btn: 'Buka kenangan lain' },
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+4', label: 'our trip', text: 'Banyak tempat yang sudah kita kunjungi, tapi tempat ternyaman tetap di samping mamas.', btn: 'Ada lagi nih' },
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+5', label: 'silly moments', text: 'Kelakuan lucu dan konyol kita yang bikin hari-hari selalu penuh tawa. My favorite version of us.', btn: 'Hihihi, next!' },
+                { src: 'https://placehold.co/400x500/eff6ff/1e3a8a?text=Foto+6', label: 'today', text: 'Dan sekarang... kita di sini. Terus bersama ya, Mas.', btn: 'Menuju kejutan' }
+            ];
+
+            const renderEmoji = () => {
+                if (page === 1) return "💌";
+                if (page === 2) return "🎉";
+                if (page === 3) return "👀";
+                if (page === 3.5) return "😡";
+                if (page >= 4 && page <= 6) return "✨";
+                if (page >= 7 && page <= 12) return "📸";
+                if (page === 13 || page === 14) return "🎵";
+                if (page === 15) return "💖";
+                return "💖";
+            };
+
+            const getProgress = () => {
+                let current = page;
+                if (page === 3.5) current = 3; 
+                return (current / 15) * 100;
+            };
+
+            const renderContent = () => {
+                switch (page) {
+                    case 1:
+                        return (
+                            <div className="w-full flex flex-col items-center">
+                                <h1 className="text-xl font-bold text-gray-800 mb-2">Hi, love!</h1>
+                                <p className="text-gray-600 mb-4">Ayo tebak passwordnya. I bet you know!!</p>
+                                <p className="text-sm text-blue-500 mb-6 font-semibold">(Clue: 11111111)</p>
+                                
+                                {errorMsg && (
+                                    <div className="mb-4 text-red-500 font-bold animate-pulse">
+                                        Oooo gituuuu!! Udah lupaaaa!
+                                    </div>
+                                )}
+
+                                <div className="flex gap-1 sm:gap-2 justify-center mb-8">
+                                    {[...Array(8)].map((_, i) => (
+                                        <div key={i} className={`w-8 h-10 sm:w-10 sm:h-12 border-2 ${errorMsg ? 'border-red-400 bg-red-50' : 'border-blue-300 bg-blue-50'} rounded-md flex items-center justify-center text-xl font-bold text-blue-700`}>
+                                            {password[i] ? '•' : ''}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-[240px] w-full mx-auto">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                        <button key={num} onClick={() => handleKeyPress(num.toString())} 
+                                            className="w-16 h-16 bg-gray-50 border border-gray-100 rounded-full font-bold text-2xl text-gray-700 shadow-sm hover:bg-blue-100 hover:text-blue-600 hover:shadow-md transition-all active:scale-95">
+                                            {num}
+                                        </button>
+                                    ))}
+                                    <div></div>
+                                    <button onClick={() => handleKeyPress('0')} 
+                                        className="w-16 h-16 bg-gray-50 border border-gray-100 rounded-full font-bold text-2xl text-gray-700 shadow-sm hover:bg-blue-100 hover:text-blue-600 hover:shadow-md transition-all active:scale-95">
+                                        0
+                                    </button>
+                                    <button onClick={handleDelete} 
+                                        className="w-16 h-16 bg-red-50 border border-red-100 rounded-full font-bold text-xl text-red-500 shadow-sm hover:bg-red-200 hover:shadow-md transition-all active:scale-95 flex items-center justify-center">
+                                        ⌫
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    case 2:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6">
+                                <h1 className="text-2xl font-bold text-gray-800">Hai, mamas!</h1>
+                                <p className="text-lg text-gray-600 leading-relaxed">
+                                    Password betul!<br/>
+                                    <span className="text-blue-600 font-semibold">Hebatnya mamas ingat hari keramat kita.</span>
+                                </p>
+                                <button onClick={() => setPage(3)} 
+                                    className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    Ayo lanjut!
+                                </button>
+                            </div>
+                        );
+                    case 3:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-8">
+                                <h1 className="text-2xl font-bold text-gray-800 leading-relaxed">
+                                    are you readyyy <br/> to open thiiissss???
+                                </h1>
+                                <div className="flex gap-4">
+                                    <button onClick={() => setPage(4)} 
+                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                        Siap
+                                    </button>
+                                    <button onClick={() => setPage(3.5)} 
+                                        className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-full shadow-md transition-transform transform hover:scale-105 active:scale-95">
+                                        Nggak dulu
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    case 3.5:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6">
+                                <h1 className="text-3xl font-bold text-red-500 animate-bounce">
+                                    OH GITU SEKARANG!!
+                                </h1>
+                                <button onClick={() => setPage(3)} 
+                                    className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    bercanda, yang
+                                </button>
+                            </div>
+                        );
+                    case 4:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6 animate-fade-in">
+                                <p className="text-2xl font-semibold text-gray-700">Tujuh tahun, mamas...</p>
+                                <button onClick={() => setPage(5)} 
+                                    className="mt-8 text-blue-500 font-bold hover:text-blue-700 transition">
+                                    Next ➔
+                                </button>
+                            </div>
+                        );
+                    case 5:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6 animate-fade-in">
+                                <p className="text-2xl font-semibold text-gray-700 leading-relaxed">
+                                    Selamat ulang tahun pernikahan ke-7...
+                                </p>
+                                <button onClick={() => setPage(6)} 
+                                    className="mt-8 text-blue-500 font-bold hover:text-blue-700 transition">
+                                    Next ➔
+                                </button>
+                            </div>
+                        );
+                    case 6:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6 animate-fade-in">
+                                <p className="text-2xl font-semibold text-gray-700">okaaayyy, last one...</p>
+                                <button onClick={() => setPage(7)} 
+                                    className="mt-8 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    Buka ✨
+                                </button>
+                            </div>
+                        );
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                        const photoIndex = page - 7;
+                        const photo = photos[photoIndex];
+                        return (
+                            <div className="flex flex-col items-center text-center w-full">
+                                <div className="relative w-full mb-6">
+                                    <div className="bg-white p-3 pb-8 rounded-xl shadow-xl transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                                        <img src={photo.src} alt="Memory" className="w-full h-auto rounded-lg object-cover bg-gray-100 aspect-[4/5]"/>
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-blue-600 shadow-sm border border-blue-100 uppercase tracking-wider">
+                                            {photo.label}
+                                        </div>
+                                    </div>
+                                </div>
+                                <p className="text-gray-700 font-medium mb-6 px-2">{photo.text}</p>
+                                <button onClick={() => setPage(page + 1)} 
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    {photo.btn}
+                                </button>
+                            </div>
+                        );
+                    case 13:
+                        return (
+                            <div className="flex flex-col items-center text-center space-y-6">
+                                <h1 className="text-3xl font-bold text-gray-800 tracking-wide">lagu kita</h1>
+                                <button onClick={() => setPage(14)} 
+                                    className="mt-8 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    Play 🎶
+                                </button>
+                            </div>
+                        );
+                    case 14:
+                        return (
+                            <div className="flex flex-col items-center text-center w-full space-y-6">
+                                <h2 className="text-xl font-bold text-gray-800 mb-2">Playlist Nostalgia</h2>
+                                
+                                <div className="w-full space-y-4">
+                                    <a href="https://www.youtube.com/watch?v=rtOvBOTyX00" target="_blank" rel="noreferrer" 
+                                       className="flex items-center p-4 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 transition group cursor-pointer text-left w-full shadow-sm">
+                                        <div className="w-12 h-12 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-500 group-hover:text-white transition">
+                                            ▶
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-800 text-sm">A Thousand Years</h3>
+                                            <p className="text-xs text-gray-500">Christina Perri</p>
+                                        </div>
+                                    </a>
+
+                                    <a href="https://www.youtube.com/watch?v=diVlE12R24w" target="_blank" rel="noreferrer" 
+                                       className="flex items-center p-4 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 transition group cursor-pointer text-left w-full shadow-sm">
+                                        <div className="w-12 h-12 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-500 group-hover:text-white transition">
+                                            ▶
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-800 text-sm">Perempuan yang Sedang Dalam Pelukan</h3>
+                                            <p className="text-xs text-gray-500">Payung Teduh</p>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <button onClick={() => setPage(15)} 
+                                    className="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    Baca Surat 💌
+                                </button>
+                            </div>
+                        );
+                    case 15:
+                        return (
+                            <div className="flex flex-col items-center w-full h-full">
+                                <h1 className="text-2xl font-bold text-blue-600 mb-6">Selamat Ulang Tahun ke-7</h1>
+                                
+                                <div className="bg-blue-50 p-6 rounded-2xl text-left w-full overflow-y-auto max-h-72 custom-scroll text-sm text-gray-700 leading-relaxed border border-blue-100 shadow-inner mb-6 relative">
+                                    <p className="mb-4">Untuk Mas yang paling aku sayang,</p>
+                                    <p className="mb-4">Tujuh tahun yang lalu, kita berjanji untuk saling menemani dalam suka dan duka. Siapa sangka waktu berlalu begitu cepat? Hari-hari yang kita lalui penuh dengan tawa, canda, dan kadang sedikit air mata, tapi semuanya membuat ikatan kita semakin kuat.</p>
+                                    <p className="mb-4">Terima kasih sudah menjadi pasangan yang sabar, suami yang pengertian, dan teman hidup yang selalu ada. Maafkan aku jika kadang masih menyebalkan atau bikin mamas marah (hehehe ✌️).</p>
+                                    <p className="mb-4">Di tahun ke-7 ini, doaku semoga kita berdua selalu diberikan kesehatan, kebahagiaan, dan rezeki yang berkah. Semoga rumah tangga kita selalu hangat dan dipenuhi kasih sayang.</p>
+                                    <p className="mb-4">I love you more than words can say. Mari kita menua bersama dan mencetak lebih banyak memori indah di masa depan.</p>
+                                    <p className="font-bold text-blue-600">Peluk dan cium,<br/>Istrimu Tercinta</p>
+                                </div>
+
+                                <button onClick={() => { setPage(1); setPassword(""); }} 
+                                    className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                                    ulang dari awal 🔄
+                                </button>
+                            </div>
+                        );
+                    default:
+                        return <div>Error</div>;
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center p-4 relative z-10">
+                    {isSnowing && <SnowAndStars />}
+                    
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden flex flex-col items-center p-6 sm:p-8 min-h-[500px]">
+                        {/* Progress Bar */}
+                        <div className="absolute top-0 left-0 h-2 bg-blue-500 transition-all duration-700 ease-in-out" 
+                             style={{ width: `${getProgress()}%` }}></div>
+                        
+                        {/* Top Moving Element */}
+                        <div className="text-5xl mb-6 animate-float mt-2 z-10">
+                            {renderEmoji()}
+                        </div>
+                        
+                        {/* Dynamic Content */}
+                        <div className="flex-1 w-full flex flex-col justify-center relative z-10">
+                            {renderContent()}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
